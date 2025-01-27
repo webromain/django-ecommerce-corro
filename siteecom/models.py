@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 from django.db import models
 from django.urls import reverse
+from django.utils.timezone import now
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -18,7 +19,7 @@ class Category(models.Model):
         return reverse('product_list_by_category', args=[self.slug])
 
 class Product(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,  null=True, blank=True)
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     description = models.TextField()
@@ -29,6 +30,12 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    # featured_product = Product.objects.filter(name__icontains='Cambridge').first()
+    # class Product(models.Model):
+    # name = models.CharField(max_length=255)
+    # category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    # # autres champs...
+
 
     def __str__(self):
         return self.name
